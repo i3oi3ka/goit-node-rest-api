@@ -5,8 +5,14 @@ export const createContactSchema = Joi.object({
     "any.required": "name must be exist",
     "string.base": "name must be string",
   }),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
+  email: Joi.string().required().messages({
+    "any.required": "email must be exist",
+    "string.base": "email must be string",
+  }),
+  phone: Joi.string().required().messages({
+    "any.required": "phone must be exist",
+    "string.base": "phone must be string",
+  }),
 });
 
 export const updateContactSchema = Joi.object({
@@ -15,4 +21,6 @@ export const updateContactSchema = Joi.object({
   }),
   email: Joi.string(),
   phone: Joi.string(),
-}).min(1);
+})
+  .min(1)
+  .messages({ "object.min": "Body must have at least one field" });
