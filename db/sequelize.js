@@ -1,7 +1,4 @@
 import { Sequelize } from "sequelize";
-import { configDotenv } from "dotenv";
-
-const conf = configDotenv();
 
 const sequelize = new Sequelize({
   dialect: process.env.DATABASE_DIALECT,
