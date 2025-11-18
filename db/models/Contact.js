@@ -15,8 +15,12 @@ const Contact = sequelize.define("contact", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  favorite: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
 });
 
-Contact.sync();
+Contact.sync({ alter: true });
 
 export default Contact;

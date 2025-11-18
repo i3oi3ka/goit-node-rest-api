@@ -3,7 +3,6 @@ import * as contactsServices from "../services/contactsServices.js";
 
 export const getAllContacts = async (req, res) => {
   const contacts = await contactsServices.listContacts();
-
   res.json(contacts);
 };
 
