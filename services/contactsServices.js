@@ -8,22 +8,7 @@ const listContacts = () => Contact.findAll();
 
 const addContact = (payload) => Contact.create(payload);
 
-// export const getContactById = (contactId) => Contact.findByPk(contactId);
-// const contactsPath = path.resolve("db", "contacts.json");
-
-// const updateContacts = (contacts) => {
-//   fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-// };
-
-// async function listContacts() {
-//   const contacts = await fs.readFile(contactsPath, "utf8");
-//   return JSON.parse(contacts);
-// }
-
-// async function getContactById(contactId) {
-//   const contacts = await listContacts();
-//   return contacts.find((contact) => contact.id === contactId) || null;
-// }
+const getContactById = (id) => Contact.findByPk(id);
 
 // async function removeContact(contactId) {
 //   const contacts = await listContacts();
@@ -37,31 +22,17 @@ const addContact = (payload) => Contact.create(payload);
 //   return removedContact;
 // }
 
-// async function addContact(payload) {
-//   const contacts = await listContacts();
-//   const newContact = {
-//     id: nanoid(),
-//     ...payload,
-//   };
-
-//   contacts.push(newContact);
-//   await updateContacts(contacts);
-//   return newContact;
-// }
-
-// async function updateContact(id, payload) {
-//   const contacts = await listContacts();
-//   const index = contacts.findIndex((contact) => contact.id === id);
-//   if (index === -1) return null;
-//   contacts[index] = { ...contacts[index], ...payload };
-//   await updateContacts(contacts);
-//   return contacts[index];
-// }
+const updateContact = async (id, payload) => {
+  const contact = await getContactById(id);
+  if (!contact) return null;
+  await contact.update(payload);
+  return contact;
+};
 
 export {
   listContacts,
-  // getContactById,
+  getContactById,
   // removeContact,
   addContact,
-  // updateContact,
+  updateContact,
 };
