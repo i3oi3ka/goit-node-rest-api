@@ -2,7 +2,7 @@ import express from "express";
 import {
   getAllContacts,
   getOneContact,
-  // deleteContact,
+  deleteContact,
   createContact,
   updateContact,
 } from "../controllers/contactsControllers.js";
@@ -19,7 +19,7 @@ contactsRouter.get("/", getAllContacts);
 
 contactsRouter.get("/:id", getOneContact);
 
-// contactsRouter.delete("/:id", deleteContact);
+contactsRouter.delete("/:id", deleteContact);
 
 contactsRouter.post("/", validateBody(createContactSchema), createContact);
 

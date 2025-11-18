@@ -1,7 +1,3 @@
-// import { nanoid } from "nanoid";
-// import fs from "node:fs/promises";
-// import path from "node:path";
-
 import Contact from "../db/models/Contact.js";
 
 const listContacts = () => Contact.findAll();
@@ -10,17 +6,12 @@ const addContact = (payload) => Contact.create(payload);
 
 const getContactById = (id) => Contact.findByPk(id);
 
-// async function removeContact(contactId) {
-//   const contacts = await listContacts();
-//   const index = contacts.findIndex((contact) => contact.id === contactId);
-//   if (index === -1) return null;
-
-//   const [removedContact] = contacts.splice(index, 1);
-//   console.log(removedContact);
-
-//   await updateContacts(contacts);
-//   return removedContact;
-// }
+const removeContact = async (contactId) => {
+  const contact = await getContactById(contactId);
+  if (!contact) return null;
+  await contact.destroy();
+  return contact;
+};
 
 const updateContact = async (id, payload) => {
   const contact = await getContactById(id);
@@ -32,7 +23,7 @@ const updateContact = async (id, payload) => {
 export {
   listContacts,
   getContactById,
-  // removeContact,
+  removeContact,
   addContact,
   updateContact,
 };
