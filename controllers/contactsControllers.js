@@ -26,7 +26,10 @@ export const deleteContact = async (req, res) => {
 };
 
 export const createContact = async (req, res) => {
-  const newContact = await contactsServices.addContact(req.body);
+  const { id: owner } = req.user;
+  console.log(req.user);
+
+  const newContact = await contactsServices.addContact({ ...req.body, owner });
   res.status(201).json(newContact);
 };
 

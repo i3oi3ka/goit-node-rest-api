@@ -15,9 +15,11 @@ const authenticate = async (req, res, next) => {
 
   if (error) throw HttpError(401, error.message);
 
-  const user = findUser({ id: data.id });
+  const user = await findUser({ id: data.id });
 
   if (!user) throw HttpError(401, "User not found");
+
+  req.user = user;
 
   next();
 };
