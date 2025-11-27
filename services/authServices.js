@@ -15,8 +15,10 @@ export const registerUser = async (payload) => {
 export const loginUser = async ({ email, password }) => {
   const user = await User.findOne({ where: { email } });
   if (!user) throw HttpError(401, "Email or password invalid");
+
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) throw HttpError(401, "Email or password invalid");
+
   const payload = { id: user.id };
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "24h" });
   return token;
