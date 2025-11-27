@@ -12,7 +12,6 @@ const authenticate = async (req, res, next) => {
     throw HttpError(401, "Authorization header must have Bearer type");
 
   const { data, error } = verifyToken(token);
-  console.log(token, data);
 
   if (error) throw HttpError(401, error.message);
 
