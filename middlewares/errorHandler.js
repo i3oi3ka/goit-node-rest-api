@@ -8,6 +8,7 @@ const errorHandler = (err, req, res, next) => {
     err.status = 409;
   }
   const { status = 500, message = "Server error" } = err;
+  console.log(err);
   res.status(status).json({ message });
 };
 

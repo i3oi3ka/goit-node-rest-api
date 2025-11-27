@@ -1,6 +1,4 @@
 import bcrypt from "bcrypt";
-import { json, where } from "sequelize";
-
 import User from "../db/models/User.js";
 import HttpError from "../helpers/HttpError.js";
 import { createToken } from "../helpers/jwt.js";
@@ -13,7 +11,7 @@ export const registerUser = async (payload) => {
 };
 
 export const loginUser = async ({ email, password }) => {
-  const user = await findUser({ where: { email } });
+  const user = await findUser({ email });
   if (!user) throw HttpError(401, "Email or password invalid");
 
   const passwordCompare = await bcrypt.compare(password, user.password);

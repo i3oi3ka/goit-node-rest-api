@@ -1,9 +1,9 @@
-import { verifyToken } from "../helpers/jwt";
-import { findUser } from "../services/authServices";
+import HttpError from "../helpers/HttpError.js";
+import { verifyToken } from "../helpers/jwt.js";
+import { findUser } from "../services/authServices.js";
 
-const authenticate = async (res, req, next) => {
+const authenticate = async (req, res, next) => {
   const { authorization } = req.headers;
-
   if (!authorization) throw HttpError(401, "Authorization header missing");
 
   const [bearer, token] = authorization.split(" ");
@@ -12,6 +12,8 @@ const authenticate = async (res, req, next) => {
     throw HttpError(401, "Authorization header must have Bearer type");
 
   const { data, error } = verifyToken(token);
+  console.log(token, data);
+
   if (error) throw HttpError(401, error.message);
 
   const user = findUser({ id: data.id });
