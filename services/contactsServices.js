@@ -1,20 +1,20 @@
 import Contact from "../db/models/Contact.js";
 
-const listContacts = () => Contact.findAll();
+const listContacts = (where) => Contact.findAll({ where });
 
 const addContact = (payload) => Contact.create(payload);
 
-const getContactById = (id) => Contact.findByPk(id);
+const getContactById = (where) => Contact.findOne({ where });
 
-const removeContact = async (contactId) => {
-  const contact = await getContactById(contactId);
+const removeContact = async (where) => {
+  const contact = await getContactById(where);
   if (!contact) return null;
   await contact.destroy();
   return contact;
 };
 
-const updateContact = async (id, payload) => {
-  const contact = await getContactById(id);
+const updateContact = async (where, payload) => {
+  const contact = await getContactById(where);
   if (!contact) return null;
   await contact.update(payload);
   return contact;

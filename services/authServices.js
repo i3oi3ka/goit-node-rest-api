@@ -19,5 +19,21 @@ export const loginUser = async ({ email, password }) => {
 
   const payload = { id: user.id };
   const token = createToken(payload);
-  return token;
+
+  await user.update({ token });
+
+  return { token, user: { email: user.email } };
+};
+
+export const refreshUser = async (user) => {
+  const token = createToken({ id: user.id });
+
+  await user.update({ token });
+
+  return { token, user: { email: user.email } };
+};
+
+export const logoutUser = async (user) => {
+  await user.update({ token: null });
+  return true;
 };
