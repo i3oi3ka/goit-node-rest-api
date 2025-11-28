@@ -12,7 +12,7 @@ const User = sequelize.define("user", {
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: { args: true, msg: "Email already exist" },
+    unique: { args: true, msg: "Email in use" },
     validate: {
       is: emailRegExp,
     },

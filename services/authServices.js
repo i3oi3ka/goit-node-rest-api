@@ -12,17 +12,20 @@ export const registerUser = async (payload) => {
 
 export const loginUser = async ({ email, password }) => {
   const user = await findUser({ email });
-  if (!user) throw HttpError(401, "Email or password invalid");
+  if (!user) throw HttpError(401, "Email or password is wrong");
 
   const passwordCompare = await bcrypt.compare(password, user.password);
-  if (!passwordCompare) throw HttpError(401, "Email or password invalid");
+  if (!passwordCompare) throw HttpError(401, "Email or password is wrong");
 
   const payload = { id: user.id };
   const token = createToken(payload);
 
   await user.update({ token });
 
-  return { token, user: { email: user.email } };
+  return {
+    token,
+    user: { email: user.email, subscription: user.subscription },
+  };
 };
 
 export const refreshUser = async (user) => {
@@ -30,7 +33,10 @@ export const refreshUser = async (user) => {
 
   await user.update({ token });
 
-  return { token, user: { email: user.email } };
+  return {
+    token,
+    user: { email: user.email, subscription: user.subscription },
+  };
 };
 
 export const logoutUser = async (user) => {

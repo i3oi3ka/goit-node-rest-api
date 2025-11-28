@@ -8,7 +8,11 @@ import {
 export const registerController = async (req, res) => {
   const newUser = await registerUser(req.body);
 
-  res.status(201).json({ email: newUser.email });
+  res
+    .status(201)
+    .json({
+      user: { email: newUser.email, subscription: newUser.subscription },
+    });
 };
 
 export const loginController = async (req, res) => {

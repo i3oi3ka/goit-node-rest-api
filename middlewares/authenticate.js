@@ -17,9 +17,9 @@ const authenticate = async (req, res, next) => {
 
   const user = await findUser({ id: data.id });
 
-  if (!user) throw HttpError(401, "User not found");
+  if (!user) throw HttpError(401, "Not authorized");
 
-  if (!user.token) throw HttpError(401, "User already logout");
+  if (!user.token) throw HttpError(401, "Not authorized");
 
   req.user = user;
 
