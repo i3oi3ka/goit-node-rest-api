@@ -9,6 +9,7 @@ import {
   logoutController,
 } from "../controllers/authControllers.js";
 import authenticate from "../middlewares/authenticate.js";
+import upload from "../middlewares/upload.js";
 
 const authRouter = Router();
 
@@ -19,5 +20,11 @@ authRouter.post("/login", validateBody(loginSchema), loginController);
 authRouter.get("/current", authenticate, getCurrentController);
 
 authRouter.post("/logout", authenticate, logoutController);
+
+//upload.array("avatar", 2);
+// upload.fields[
+//   ({ name: "avatar", maxCount: 1 }, { name: "subAvatar", maxCount: 2 })
+// ];
+authRouter.post("/avatars", upload.single("avatar"));
 
 export default authRouter;
