@@ -1,7 +1,12 @@
+import * as fs from "node:fs/promises";
+import path from "node:path";
+
 import bcrypt from "bcrypt";
 import User from "../db/models/User.js";
 import HttpError from "../helpers/HttpError.js";
 import { createToken } from "../helpers/jwt.js";
+
+const avatarsDir = path.resolve("public", "avatars");
 
 export const findUser = (where) => User.findOne({ where });
 
@@ -42,4 +47,15 @@ export const refreshUser = async (user) => {
 export const logoutUser = async (user) => {
   await user.update({ token: null });
   return true;
+};
+
+export const addAvatar = async (user, file) => {
+  let avatar = null;
+  if (file) {
+    const newPath = path.join(avatarsDir, file.filename);
+    await fs.rename(file.path, newPath);
+    avatar = path.join("public", "avatars", file.filename);
+  }
+
+  await user.update({ avatarURL: avatar });
 };

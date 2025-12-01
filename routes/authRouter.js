@@ -7,6 +7,7 @@ import {
   loginController,
   getCurrentController,
   logoutController,
+  addAvatarController,
 } from "../controllers/authControllers.js";
 import authenticate from "../middlewares/authenticate.js";
 import upload from "../middlewares/upload.js";
@@ -25,6 +26,11 @@ authRouter.post("/logout", authenticate, logoutController);
 // upload.fields[
 //   ({ name: "avatar", maxCount: 1 }, { name: "subAvatar", maxCount: 2 })
 // ];
-authRouter.post("/avatars", upload.single("avatar"));
+authRouter.post(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  addAvatarController
+);
 
 export default authRouter;
