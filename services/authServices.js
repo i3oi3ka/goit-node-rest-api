@@ -5,6 +5,9 @@ import bcrypt from "bcrypt";
 import User from "../db/models/User.js";
 import HttpError from "../helpers/HttpError.js";
 import { createToken } from "../helpers/jwt.js";
+import cloudinary from "../helpers/cloudinary.js";
+
+// import cloudinary from "../helpers/cloudinary.js";
 
 const avatarsDir = path.resolve("public", "avatars");
 
@@ -54,7 +57,21 @@ export const addAvatar = async (user, file) => {
   if (file) {
     const newPath = path.join(avatarsDir, file.filename);
     await fs.rename(file.path, newPath);
-    avatar = path.join("public", "avatars", file.filename);
+    avatar = path.join("avatars", file.filename);
+  }
+
+  await user.update({ avatarURL: avatar });
+};
+
+export const addAvatarCloudinary = async (user, file) => {
+  let avatar = null;
+  if (file) {
+    const { secure_url } = await cloudinary.uploader.upload(file.path, {
+      folder: "avatars",
+      use_filename: true,
+    });
+    await fs.unlink(file.path);
+    avatar = secure_url;
   }
 
   await user.update({ avatarURL: avatar });
