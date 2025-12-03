@@ -2,6 +2,9 @@
   "name": "goit-node-rest-api",
   "type": "module",
   "scripts": {
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules mpx jest",
+    "coverage": "cross-env NODE_OPTIONS=--experimental-vm-modules mpx jest --coverage",
+    "test:file": "cross-env NODE_OPTIONS=--experimental-vm-modules mpx jest functions/__tests__/file.test.js",
     "start": "node ./app.js",
     "dev": "nodemon ./app.js"
   },
@@ -21,6 +24,8 @@
     "sequelize": "^6.37.7"
   },
   "devDependencies": {
+    "cross-env": "^10.1.0",
+    "jest": "^30.2.0",
     "nodemon": "^3.0.2"
   }
 }
