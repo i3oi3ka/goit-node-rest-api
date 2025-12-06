@@ -1,5 +1,6 @@
 import * as fs from "node:fs/promises";
 import path from "node:path";
+import gravatar from "gravatar";
 
 import bcrypt from "bcrypt";
 import User from "../db/models/User.js";
@@ -14,8 +15,9 @@ const avatarsDir = path.resolve("public", "avatars");
 export const findUser = (where) => User.findOne({ where });
 
 export const registerUser = async (payload) => {
+  const avatarURL = gravatar.url(payload.email, { s: "200" });
   const hashPassword = await bcrypt.hash(payload.password, 10);
-  return User.create({ ...payload, password: hashPassword });
+  return User.create({ ...payload, password: hashPassword, avatarURL });
 };
 
 export const loginUser = async ({ email, password }) => {
