@@ -7,6 +7,7 @@ import User from "../db/models/User.js";
 import HttpError from "../helpers/HttpError.js";
 import { createToken } from "../helpers/jwt.js";
 import cloudinary from "../helpers/cloudinary.js";
+import { log } from "node:console";
 
 // import cloudinary from "../helpers/cloudinary.js";
 
@@ -15,7 +16,11 @@ const avatarsDir = path.resolve("public", "avatars");
 export const findUser = (where) => User.findOne({ where });
 
 export const registerUser = async (payload) => {
-  const avatarURL = gravatar.url(payload.email, { s: "200" });
+  const avatarURL = gravatar.url(payload.email, {
+    s: "200",
+    d: "mp",
+    protocol: "https",
+  });
   const hashPassword = await bcrypt.hash(payload.password, 10);
   return User.create({ ...payload, password: hashPassword, avatarURL });
 };
