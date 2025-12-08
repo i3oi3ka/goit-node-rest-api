@@ -8,7 +8,9 @@ export const registerSchema = Joi.object({
 });
 
 export const emailSchema = Joi.object({
-  email: Joi.string().pattern(emailRegExp).required(),
+  email: Joi.string().pattern(emailRegExp).required().messages({
+    "any.required": "missing required field email",
+  }),
 });
 
 export const loginSchema = Joi.object({
