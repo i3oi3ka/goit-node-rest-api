@@ -7,9 +7,11 @@ import User from "../db/models/User.js";
 import HttpError from "../helpers/HttpError.js";
 import { createToken } from "../helpers/jwt.js";
 import cloudinary from "../helpers/cloudinary.js";
-import { log } from "node:console";
+import sendMail from "../helpers/sendEmail.js";
 
 // import cloudinary from "../helpers/cloudinary.js";
+
+const { PUBLIC_URL } = process.env;
 
 const avatarsDir = path.resolve("public", "avatars");
 
@@ -22,12 +24,24 @@ export const registerUser = async (payload) => {
     protocol: "https",
   });
   const hashPassword = await bcrypt.hash(payload.password, 10);
-  return User.create({ ...payload, password: hashPassword, avatarURL });
+  const user = User.create({ ...payload, password: hashPassword, avatarURL });
+  const verificationToken = createToken({ email: payload.email });
+  const verifyEmail = {
+    to: payload.email,
+    subject: "Verify Email",
+    html: `<a href="${PUBLIC_URL}/api/auth/verify/${verificationToken}" targer="_blank">Click verify email</a>`,
+  };
+
+  await sendMail(verifyEmail);
+
+  return user;
 };
 
 export const loginUser = async ({ email, password }) => {
   const user = await findUser({ email });
   if (!user) throw HttpError(401, "Email or password is wrong");
+
+  if (!user.verify) throw HttpError(401, "Email not verified");
 
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) throw HttpError(401, "Email or password is wrong");
