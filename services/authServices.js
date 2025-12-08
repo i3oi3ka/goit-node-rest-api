@@ -25,7 +25,12 @@ export const registerUser = async (payload) => {
     protocol: "https",
   });
   const hashPassword = await bcrypt.hash(payload.password, 10);
-  const user = User.create({ ...payload, password: hashPassword, avatarURL });
+  const user = await User.create({
+    ...payload,
+    password: hashPassword,
+    avatarURL,
+  });
+
   const verificationToken = createToken({ email: payload.email });
   const verifyEmail = {
     to: payload.email,
