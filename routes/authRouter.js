@@ -1,10 +1,15 @@
 import { Router } from "express";
 import User from "../db/models/User.js";
 import validateBody from "../helpers/validateBody.js";
-import { registerSchema, loginSchema } from "../schemas/authSchemas.js";
+import {
+  registerSchema,
+  loginSchema,
+  emailSchema,
+} from "../schemas/authSchemas.js";
 import {
   registerController,
   verifyController,
+  resendVerifyController,
   loginController,
   getCurrentController,
   logoutController,
@@ -18,6 +23,8 @@ const authRouter = Router();
 authRouter.post("/register", validateBody(registerSchema), registerController);
 
 authRouter.get("/verify/:verificationToken", verifyController);
+
+authRouter.post("/verify/", validateBody(emailSchema), resendVerifyController);
 
 authRouter.post("/login", validateBody(loginSchema), loginController);
 

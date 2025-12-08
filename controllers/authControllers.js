@@ -5,6 +5,7 @@ import {
   refreshUser,
   logoutUser,
   addAvatar,
+  resendVerifyUser,
 } from "../services/authServices.js";
 
 export const registerController = async (req, res) => {
@@ -20,6 +21,12 @@ export const verifyController = async (req, res) => {
   verifyUser(verificationToken);
 
   res.json({ message: "Succesfuly verificated email" });
+};
+
+export const resendVerifyController = async (req, res) => {
+  await resendVerifyUser(req.body);
+
+  res.json({ message: "Verify email resend successfuly" });
 };
 
 export const loginController = async (req, res) => {

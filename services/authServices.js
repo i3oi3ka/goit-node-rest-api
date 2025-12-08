@@ -42,10 +42,25 @@ export const verifyUser = async (verificationToken) => {
   const { data, error } = verifyToken(verificationToken);
   if (error) throw HttpError(401, error.message);
 
-  const user = findUser({ email: data.email });
+  const user = await findUser({ email: data.email });
 
   if (user.verify) throw HttpError(401, "User already verififcated");
   await user.update({ verify: true });
+};
+
+export const resendVerifyUser = async ({ email }) => {
+  const user = await findUser({ email });
+  if (!user) throw HttpError(401, "Email not found");
+  if (user.verify) throw HttpError(401, "User already verififcated");
+
+  const verificationToken = createToken({ email });
+  const verifyEmail = {
+    to: email,
+    subject: "Verify Email",
+    html: `<a href="${PUBLIC_URL}/api/auth/verify/${verificationToken}" targer="_blank">Click verify email</a>`,
+  };
+
+  await sendMail(verifyEmail);
 };
 
 export const loginUser = async ({ email, password }) => {
