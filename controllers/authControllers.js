@@ -1,5 +1,6 @@
 import {
   registerUser,
+  verifyUser,
   loginUser,
   refreshUser,
   logoutUser,
@@ -12,6 +13,13 @@ export const registerController = async (req, res) => {
   res.status(201).json({
     user: { email: newUser.email, subscription: newUser.subscription },
   });
+};
+
+export const verifyController = async (req, res) => {
+  const { verificationToken } = req.params;
+  verifyUser(verificationToken);
+
+  res.json({ message: "Succesfuly verificated email" });
 };
 
 export const loginController = async (req, res) => {

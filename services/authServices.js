@@ -5,9 +5,10 @@ import gravatar from "gravatar";
 import bcrypt from "bcrypt";
 import User from "../db/models/User.js";
 import HttpError from "../helpers/HttpError.js";
-import { createToken } from "../helpers/jwt.js";
+import { createToken, verifyToken } from "../helpers/jwt.js";
 import cloudinary from "../helpers/cloudinary.js";
 import sendMail from "../helpers/sendEmail.js";
+import { verify } from "node:crypto";
 
 // import cloudinary from "../helpers/cloudinary.js";
 
@@ -35,6 +36,16 @@ export const registerUser = async (payload) => {
   await sendMail(verifyEmail);
 
   return user;
+};
+
+export const verifyUser = async (verificationToken) => {
+  const { data, error } = verifyToken(verificationToken);
+  if (error) throw HttpError(401, error.message);
+
+  const user = findUser({ email: data.email });
+
+  if (user.verify) throw HttpError(401, "User already verififcated");
+  await user.update({ verify: true });
 };
 
 export const loginUser = async ({ email, password }) => {
